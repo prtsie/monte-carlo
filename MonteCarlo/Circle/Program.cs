@@ -1,6 +1,8 @@
-﻿namespace Circle
+﻿using System;
+
+namespace Circle
 {
-    internal class Program
+    internal static class Program
     {
         private struct Point(double x, double y)
         {
@@ -12,16 +14,16 @@
         private const int SleepDuration = 500;
         private const char LoadingChar = '.';
         private const int LoadingCharsCount = 5;
-        private static readonly Random random = new Random();
+        private static readonly Random Random = new();
 
-        static void Main(string[] args)
+        private static void Main()
         {
             while (true)
             {
-                double radius = 1;
-                double lengthLimit = Math.Sqrt(2);
+                var radius = 1.0;
+                var lengthLimit = Math.Sqrt(3);
                 Console.Write($"Радиус (по умолчанию {radius}) >>> ");
-                if (double.TryParse(Console.ReadLine(), out double input) && input > 0)
+                if (double.TryParse(Console.ReadLine(), out var input) && input > 0)
                 {
                     radius = input;
                 }
@@ -36,7 +38,7 @@
                     Console.Write("Количество итераций >>> ");
                 } while (!(int.TryParse(Console.ReadLine(), out iterationsCount)) && iterationsCount <= 0);
                 Console.Clear();
-                var iterations = Task.Run(() => { return DoIterations(); });
+                var iterations = Task.Run(DoIterations);
                 var waitString = LoadingChar.ToString();
                 do
                 {
@@ -69,7 +71,7 @@
                 int DoIterations()
                 {
                     var count = 0;
-                    for (int i = 0; i < iterationsCount; i++)
+                    for (var i = 0; i < iterationsCount; i++)
                     {
                         var first = GeneratePointOnCircle(radius);
                         var second = GeneratePointOnCircle(radius);
@@ -78,17 +80,15 @@
                             count++;
                         }
                     }
-
                     return count;
                 }
             }
-
         }
 
         private static Point GeneratePointOnCircle(double radius)
         {
-            var x = random.NextDouble() * Math.Pow(-1, random.Next(2));
-            var y = Math.Sqrt(1 - Math.Pow(x, 2)) * Math.Pow(-1, random.Next(2));
+            var randomAngle = Random.NextDouble() * Math.PI * 2;
+            var (y, x) = Math.SinCos(randomAngle);
             return new Point(x * radius, y * radius);
         }
 
