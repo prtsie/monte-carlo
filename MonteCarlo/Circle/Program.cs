@@ -92,11 +92,6 @@ namespace Circle
             return new Point(x * radius, y * radius);
         }
 
-        private static double GetLength(Point first, Point second)
-        {
-            var deltaX = Math.Abs(first.X - second.X);
-            var deltaY = Math.Abs(first.Y - second.Y);
-            return Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
-        }
+        private static double GetLength(Point first, Point second) => Math.Sqrt(Math.Pow(first.X - second.X, 2) + Math.Pow(first.Y - second.Y, 2));
     }
 }
